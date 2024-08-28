@@ -13,6 +13,8 @@ import PageNotFound from "./pages/PageNotFound";
 import AppLayout from "./ui/AppLayout";
 import { Toaster } from "react-hot-toast";
 import { useState } from "react";
+import BookingDetail from "./features/bookings/BookingDetail";
+import Check_in from "./features/bookings/Check-in-out/Check_in";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -29,12 +31,23 @@ function App() {
         <ReactQueryDevtools initialIsOpen={false} />
         <GlobalStyles />
         <BrowserRouter>
-          <Routes >
-            <Route element={<AppLayout showCabin={showCabin} setShowCabin={setShowCabin}/>}>
+          <Routes>
+            <Route
+              element={
+                <AppLayout showCabin={showCabin} setShowCabin={setShowCabin} />
+              }
+            >
               <Route index element={<Navigate replace to="dashboard" />} />
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="bookings" element={<Bookings />} />
-              <Route path="cabins" element={<Cabins showCabin={showCabin} setShowCabin={setShowCabin}/>} />
+              <Route path="bookings/:id" element={<BookingDetail />} />
+              <Route path="checkin/:id" element={<Check_in />} />
+              <Route
+                path="cabins"
+                element={
+                  <Cabins showCabin={showCabin} setShowCabin={setShowCabin} />
+                }
+              />
               <Route path="users" element={<Users />} />
               <Route path="settings" element={<Settings />} />
               <Route path="account" element={<Account />} />

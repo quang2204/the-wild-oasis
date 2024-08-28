@@ -18,7 +18,7 @@ import Action from "../../hooks/Action";
 // v1
 const TableRow = styled.div`
   display: grid;
-  grid-template-columns: 0.6fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 0.6fr 1.7fr 1fr 1fr 1fr 1fr 1fr;
   column-gap: 2.4rem;
   align-items: center;
   padding: 1.4rem 2.4rem;
@@ -119,9 +119,12 @@ const CabinRow = ({
 
   return (
     <>
-      <TableRow>
+      <TableRow className="text-center">
         <Cabin>{index + 1}</Cabin>
-        <Cabin className="text-left">{name}</Cabin>
+        <Cabin className="text-center">
+          {name.length > 15 ? name.substring(0, 15) + "..." : name}
+        </Cabin>
+
         <div className="flex justify-center ml-5">
           <Img
             src={image}
@@ -142,6 +145,7 @@ const CabinRow = ({
           isLast={isLast}
           close={close}
           setDeleteShow={setDeleteShowCabin}
+          type="cabin"
         ></Action>
       </TableRow>
       {showCabin && (

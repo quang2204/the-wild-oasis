@@ -1,18 +1,43 @@
 import { getToday } from "../utils/helpers";
 import supabase from "./supabase";
-export const getBookings = async () => {
-  const { data, error } = await supabase
+export const getBookings = async (filterValue, sort, page) => {
+  // Build the query
+  let query = supabase
     .from("bookings")
     .select(
-      "id, created_at, startDate, endDate, numNights, numGuests, status, totalPrice, guests(fullName, email), cabins(name)"
+      "id, created_at, startDate, endDate, numNights, numGuests, status, totalPrice, guests(fullName, email), cabins(name)",
+      { count: "exact" }
     );
-    
-  if (error) {
-    console.log(error);
-    throw new Error("bookings not found");
+
+  // Áp dụng bộ lọc nếu giá trị không phải là "tất cả"
+
+  if (filterValue.value !== "all" && filterValue.value !== undefined) {
+    query = query.eq(filterValue.field, filterValue.value);
   }
-  return data;
+  //sort
+  if (sort)
+    query = query.order(sort.field, {
+      ascending: sort.order === "asc",
+    });
+  //Pagination
+  if (page) {
+    const from = (page - 1) * 10;
+    const to = from + 9;
+    query = query.range(from, to);
+  }
+  // Execute the query
+  const { data, error, count } = await query;
+
+  // Handle errors
+  if (error) {
+    console.error("Error fetching bookings:", error);
+    throw new Error("Bookings not found");
+  }
+
+  // Return the data
+  return { data, count };
 };
+
 export async function getBooking(id) {
   const { data, error } = await supabase
     .from("bookings")
@@ -83,13 +108,13 @@ export async function getStaysTodayActivity() {
 }
 
 export async function updateBooking(id, obj) {
+  console.log(id, obj);
   const { data, error } = await supabase
     .from("bookings")
     .update(obj)
     .eq("id", id)
     .select()
     .single();
-
   if (error) {
     console.error(error);
     throw new Error("Booking could not be updated");
@@ -102,7 +127,7 @@ export async function deleteBooking(id) {
   const { data, error } = await supabase.from("bookings").delete().eq("id", id);
 
   if (error) {
-    console.error(error);
+    console.error(error.message);
     throw new Error("Booking could not be deleted");
   }
   return data;

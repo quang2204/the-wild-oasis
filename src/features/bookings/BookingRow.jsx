@@ -5,6 +5,10 @@ import Table from "../../ui/Table";
 import { format, isToday } from "date-fns";
 import { formatCurrency, formatDistanceFromNow } from "../../utils/helpers";
 import Tag from "../../ui/Tag";
+import Action from "../../hooks/Action";
+import { useState } from "react";
+import ConfirmDelete from "../../ui/ConfirmDelete";
+import useDleteBooking from "./useDeleteBooking";
 
 const Cabin = styled.div`
   font-size: 1.6rem;
@@ -33,12 +37,15 @@ const Amount = styled.div`
   font-weight: 500;
 `;
 
-const BookingRow = ({ booking, index }) => {
+const BookingRow = ({ booking, index, check, setCheck, close, isLast }) => {
+  const [showCabin, setShowCabin] = useState(false);
+  const [deleteshowCabin, setDeleteShowCabin] = useState(false);
+  const { deleteBooking, isDelete } = useDleteBooking();
   const {
     cabins: { name: cabinName },
     created_at,
     endDate,
-    guests: { email: email, fullName: guestName },
+    guests: { email, fullName: guestName },
     id,
     numGuests,
     numNights,
@@ -51,33 +58,61 @@ const BookingRow = ({ booking, index }) => {
     "checked-in": "green",
     "checked-out": "silver",
   };
+  const Delete = (id) => {
+    deleteBooking(id);
+  };
   return (
-    <Table.Row>
-      <Cabin>{index + 1}</Cabin>
-      <Cabin>{cabinName}</Cabin>
+    <>
+      <Table.Row>
+        <Cabin className="text-center">{index + 1}</Cabin>
+        <Cabin className="text-center">
+          {cabinName.length > 15
+            ? cabinName.substring(0, 15) + "..."
+            : cabinName}
+        </Cabin>
 
-      <Stacked>
-        <span>{guestName}</span>
-        <span>{email}</span>
-      </Stacked>
+        <Stacked>
+          <span>{guestName}</span>
+          <span>{email}</span>
+        </Stacked>
 
-      <Stacked>
-        <span>
-          {isToday(new Date(startDate))
-            ? "Today"
-            : formatDistanceFromNow(startDate)}
-          &rarr; {numNights} night stay
-        </span>
-        <span>
-          {format(new Date(startDate), "MMM dd yyyy")} &mdash;{" "}
-          {format(new Date(endDate), "MMM dd yyyy")}
-        </span>
-      </Stacked>
-
-      <Tag type={statusToTagName[status]}>{status.replace("-", " ")}</Tag>
-
-      <Amount>{formatCurrency(totalPrice)}</Amount>
-    </Table.Row>
+        <Stacked>
+          <span>
+            {isToday(new Date(startDate))
+              ? "Today"
+              : formatDistanceFromNow(startDate)}
+            &rarr; {numNights} night stay
+          </span>
+          <span>
+            {format(new Date(startDate), "MMM dd yyyy")} &mdash;{" "}
+            {format(new Date(endDate), "MMM dd yyyy")}
+          </span>
+        </Stacked>
+        <Tag type={statusToTagName[status]}>{status.replace("-", " ")}</Tag>
+        <Amount>{formatCurrency(totalPrice)}</Amount>
+        <div className="text-center">
+          <Action
+            id={id}
+            check={check}
+            setCheck={setCheck}
+            setShow={setShowCabin}
+            isLast={isLast}
+            close={close}
+            setDeleteShow={setDeleteShowCabin}
+            type="booking"
+            status={status}
+          ></Action>
+        </div>
+      </Table.Row>
+      {deleteshowCabin && (
+        <ConfirmDelete
+          onConfirm={() => Delete(id)}
+          closeModal={() => setDeleteShowCabin(false)}
+          resource={cabinName}
+          disabled={isDelete}
+        ></ConfirmDelete>
+      )}
+    </>
   );
 };
 

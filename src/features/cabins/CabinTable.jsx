@@ -70,19 +70,15 @@ const CabinTable = () => {
 
   return (
     <Menus>
-      <Table
-        role="table"
-        className="text-center"
-        columns="0.7fr 1.2fr 0.8fr 1fr 0.9fr 1.2fr 1fr"
-      >
+      <Table role="table" columns="0.7fr 1.7fr 1.1fr 1.1fr 1fr 1.2fr 1fr">
         <Table.Header role="row">
-          <div>Stt</div>
-          <div>Cabin</div>
-          <div>Img</div>
-          <div>Capecity</div>
-          <div>Price</div>
-          <div>Discount</div>
-          <div>Action</div>
+          <div className="text-center">Stt</div>
+          <div className="text-center ">Cabin</div>
+          <div className="text-center">Img</div>
+          <div className="text-center">Capecity</div>
+          <div className="text-center">Price</div>
+          <div className="text-center">Discount</div>
+          <div className="text-center">Action</div>
         </Table.Header>
         <Table.Body
           data={filteredCabins}

@@ -13,7 +13,7 @@ const StyledSidebar = styled.aside`
   display: flex;
   flex-direction: column;
   gap: 3.2rem;
-  height: 100vh;
+  height: 100%;
   width: 230px;
   transition: 0.5s ease-in all;
   z-index: 999;

@@ -38,6 +38,9 @@ const Filter = ({ filterField, options }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const handClick = (value) => {
     searchParams.set(filterField, value);
+    if (searchParams.get("page")) {
+      searchParams.delete("page");
+    }
     setSearchParams(searchParams);
   };
   const active = searchParams.get(filterField) || options[0].value;
