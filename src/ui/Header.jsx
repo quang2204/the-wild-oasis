@@ -1,9 +1,13 @@
 import { useLocation, useParams } from "react-router-dom";
 import styled from "styled-components";
+import Logout from "../features/authentication/Logout";
+import HearderMenu from "./HearderMenu";
 const StyledHeader = styled.header`
   padding: 1.2rem 4.8rem;
   border-bottom: 1px solid var(--color-grey-100);
   /* margin-left: -30px; */
+  display: flex;
+  justify-content: space-between;
   z-index: 900;
   margin-top: 10px;
   position: sticky;
@@ -47,6 +51,7 @@ function Header({ open, setOpen }) {
           </label>
         </div>
       </div>
+      <HearderMenu></HearderMenu>
     </StyledHeader>
   );
 }

@@ -3,21 +3,23 @@ import Button from "../../ui/Button";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
-import apiAuth from "../../services/apiAuth";
-import useLogin from "./useLogin";
+import useLogin, { useLoginGG_Git } from "./useLogin";
 import SpinnerMini from "../../ui/SpinnerMini";
 
 function LoginForm() {
-  const [email, setEmail] = useState("quang20042204@gmail.com");
-  const [password, setPassword] = useState("uang22");
+  const [email, setEmail] = useState("quang2004@gmail.com");
+  const [password, setPassword] = useState("2004");
   const { login, isLoading } = useLogin();
-  function handleSubmit(e) {
-    e.preventDefault();
+  const { loginGg_git, isLoadingGg_git } = useLoginGG_Git();
+  console.log(isLoadingGg_git);
+  function handleSubmit() {
     login({ email, password });
   }
-
+  const handleloginGg_Git = (value) => {
+    loginGg_git(value);
+  };
   return (
-    <Form onSubmit={handleSubmit}>
+    <div>
       <FormRow label="Email address" orientation="vertical">
         <Input
           type="email"
@@ -46,11 +48,28 @@ function LoginForm() {
           className="w-full flex justify-center items-center gap-3"
           size="large"
           disabled={isLoading || !email || !password}
+          onClick={handleSubmit}
         >
-          {isLoading ? <SpinnerMini /> : ""} LOGIN
+          {isLoading ? <SpinnerMini /> : ""} Login
+        </Button>
+        <Button
+          className="w-full flex justify-center items-center gap-3"
+          size="large"
+          disabled={isLoadingGg_git}
+          onClick={() => handleloginGg_Git("gg")}
+        >
+          {isLoadingGg_git ? <SpinnerMini /> : ""} Login Google
+        </Button>
+        <Button
+          className="w-full flex justify-center items-center gap-3"
+          size="large"
+          disabled={isLoadingGg_git}
+          onClick={() => handleloginGg_Git("git")}
+        >
+          {isLoadingGg_git ? <SpinnerMini /> : ""} Login GitHub
         </Button>
       </FormRow>
-    </Form>
+    </div>
   );
 }
 

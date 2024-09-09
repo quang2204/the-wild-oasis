@@ -15,6 +15,7 @@ import { Toaster } from "react-hot-toast";
 import { useState } from "react";
 import BookingDetail from "./features/bookings/BookingDetail";
 import Check_in from "./features/bookings/Check-in-out/Check_in";
+import PrivateRouter from "./ui/PrivateRouter";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -34,7 +35,12 @@ function App() {
           <Routes>
             <Route
               element={
-                <AppLayout showCabin={showCabin} setShowCabin={setShowCabin} />
+                <PrivateRouter>
+                  <AppLayout
+                    showCabin={showCabin}
+                    setShowCabin={setShowCabin}
+                  />
+                </PrivateRouter>
               }
             >
               <Route index element={<Navigate replace to="dashboard" />} />
